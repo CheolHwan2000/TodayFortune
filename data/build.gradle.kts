@@ -37,9 +37,9 @@ android {
 dependencies {
     implementation(project(":domain"))
 
-//    // Retrofit
-//    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
-//    implementation ("com.squareup.retrofit2:converter-moshi:2.9.0")
+    // Retrofit
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-moshi:2.9.0")
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
