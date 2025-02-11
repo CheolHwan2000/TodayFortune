@@ -21,3 +21,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "TodayFortunePR"
 include(":app")
+include(":data")
+include(":di")
+include(":domain")
+include(":presentation")
