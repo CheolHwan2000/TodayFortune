@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -30,9 +32,24 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+    viewBinding{
+        enable = true
+    }
 }
 
 dependencies {
+    implementation(project(":domain"))
+    implementation(project(":data"))
+
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
+
+
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+
+    implementation(libs.androidx.activity)
+    implementation(libs.androidx.constraintlayout)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
