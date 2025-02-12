@@ -12,6 +12,9 @@ interface UserFortunesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertUserFortune(userFortune: UserFortunes)
 
+    @Query("SELECT * FROM user_fortunes_table WHERE name = :name and createdDate = date('now')")
+    fun getSameUserFortune(name : String) : LiveData<List<UserFortunes>>
+
     @Query("SELECT * FROM user_fortunes_table WHERE name = :name")
     fun getUserFortune(name : String): LiveData<List<UserFortunes>>
 }
