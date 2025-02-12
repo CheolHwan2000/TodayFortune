@@ -7,5 +7,6 @@ import androidx.room.PrimaryKey
 data class UserFortunes(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val name: String,
-    val fortune: String
+    val fortune: String,
+    val createdDate: String
 )
