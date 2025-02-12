@@ -10,7 +10,7 @@ import com.example.data.local.entity.Fortunes
 @Dao
 interface FortunesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertFortunes(fortunes: Fortunes)
+    suspend fun insertFortunes(fortunes: List<Fortunes>)
 
     @Query("SELECT * FROM fortunes_table ORDER BY RANDOM() LIMIT 1")
     fun getRandomFortune(): LiveData<List<Fortunes>>

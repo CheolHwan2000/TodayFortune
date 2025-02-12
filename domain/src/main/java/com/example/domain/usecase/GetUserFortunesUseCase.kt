@@ -6,7 +6,7 @@ import com.example.domain.repository.UserFortunesRepository
 import javax.inject.Inject
 
 class GetUserFortunesUseCase @Inject constructor(private val repository: UserFortunesRepository) {
-    fun invoke(name : String): LiveData<List<UserFortunes>>{
+    operator fun invoke(name : String): LiveData<List<UserFortunes>>{
         return repository.getUserFortune(name)
     }
 }
