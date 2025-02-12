@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.View.BaseSavedState
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
@@ -29,8 +28,8 @@ class MainActivity : AppCompatActivity() {
         observe()
         binding.btnClick.setOnClickListener {
             val userName = binding.edtName.text.toString().trim()
-//            val createdDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
-            val createdDate = ("2025-02-12")
+            val createdDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+//            val createdDate = ("2025-02-12")
             viewModel.randomFortune().observeForever{fortunesList ->
                 viewModel.insertUserFortunes(UserFortunes(userName, fortunesList[0].fortune, createdDate))
             }
