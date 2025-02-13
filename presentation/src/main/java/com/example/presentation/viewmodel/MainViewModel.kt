@@ -1,11 +1,9 @@
 package com.example.presentation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.model.Fortunes
 import com.example.domain.model.UserFortunes
 import com.example.domain.usecase.FetchFortunesUseCase
 import com.example.domain.usecase.GetUserFortunesDuplicateUsecase
@@ -20,7 +18,7 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val fetchFortunesUseCase: FetchFortunesUseCase,
     private val randomFortuneUseCase: RandomFortuneUseCase,
-    private val insertUserFortunesUseCase : InsertUserFortunesUseCase,
+    private val insertUserFortunesUseCase: InsertUserFortunesUseCase,
     private val getUserFortunesUseCase: GetUserFortunesUseCase,
     private val getUserFortunesDuplicateUsecase: GetUserFortunesDuplicateUsecase
 
@@ -37,72 +35,36 @@ class MainViewModel @Inject constructor(
     val isDuplicated: LiveData<Boolean> get() = _isDuplicated
 
     // 운세 Room DB에 저장
-    fun fetchFortunes(){
+    fun fetchFortunes() {
         viewModelScope.launch {
             fetchFortunesUseCase()
         }
     }
 
-    // Room DB에 저장된 운세 랜덤으로 가져오기
-    fun randomFortune() : LiveData<List<Fortunes>>{
-        return randomFortuneUseCase()
-    }
-
-
     // 중복 확인 후 UserFortunes 삽입
-    fun insertUserFortunes(userFortunes: UserFortunes){
+    fun insertUserFortunes(userName: String, createdDate: String) {
         viewModelScope.launch {
-            getUserFortunesDuplicateUsecase(userFortunes.name).observeForever{fortune ->
-                if(fortune.isEmpty()){
-                    viewModelScope.launch {
-                        insertUserFortunesUseCase(userFortunes)
-                    }
-                    _isDuplicated.postValue(true)
-                }else{
-                    _isDuplicated.postValue(false)
-                }
-                Log.e("MainViewModel","$fortune")
+            val fortune = randomFortuneUseCase() // suspend 함수 호출
+            val userFortunes = UserFortunes(userName, fortune.fortune, createdDate)
+
+            val fortuneList = getUserFortunesDuplicateUsecase(userName)
+            if (fortuneList.isEmpty()) {
+                insertUserFortunesUseCase(userFortunes)
+                _isDuplicated.postValue(true)
+            } else {
+                _isDuplicated.postValue(false)
             }
         }
     }
 
-//    fun insertUserFortunes(userFortunes: UserFortunes) {
-//        viewModelScope.launch {
-//            // 중복 확인
-//            val fortuneList = getUserFortunesDuplicateUsecase(userFortunes.name).value
-//            if (fortuneList.isNullOrEmpty()) {
-//                // 중복되지 않으면 삽입
-//                insertUserFortunesUseCase(userFortunes)
-//                _isDuplicated.postValue(true)  // 삽입 후 중복 처리 완료
-//                Log.e("MainViewModel_Success","${getUserFortunesDuplicateUsecase(userFortunes.name).value}")
-//
-//            } else {
-//                // 중복된 데이터가 있으면 실패 처리
-//                _isDuplicated.postValue(false)
-//                Log.e("MainViewModel_Fail","${getUserFortunesDuplicateUsecase(userFortunes.name).value}")
-//
-//            }
-//        }
-//    }
-
-    // 중복 확인 후 데이터 불러오기
-    fun getUserFortunes(name : String){
+    // 중복 확인 후 데이터 삽입 과정이 있었으니 확실히 데이터가 있다, 고로 있는 데이터 불러오기
+    fun getUserFortunes(name: String) {
         viewModelScope.launch {
-            getUserFortunesDuplicateUsecase(name).observeForever{fortunes ->
-                if(fortunes.isEmpty()){
-                    getUserFortunesUseCase(name).observeForever{fortune ->
-                        _fortune.postValue(fortune ?: emptyList())
-                        _isDataLoaded.postValue(true)  // 🔹 데이터 로딩 완료 표시
+            val userFortuneList = getUserFortunesUseCase(name)
+            _fortune.postValue(userFortuneList)
+            _isDataLoaded.postValue(true)  // 🔹 데이터 로딩 완료 표시
 
-                    }
-                }else{
-                    _fortune.postValue(fortunes ?: emptyList())
-                    _isDataLoaded.postValue(true)  // 🔹 데이터 로딩 완료 표시
-                }
-            }
         }
 
     }
-
-
 }

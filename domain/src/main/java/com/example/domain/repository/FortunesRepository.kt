@@ -1,11 +1,9 @@
 package com.example.domain.repository
 
-import androidx.lifecycle.LiveData
 import com.example.domain.model.Fortunes
 
 interface FortunesRepository {
-//    suspend fun insertFortunes(fortunes: Fortunes): Result<Unit>
-    fun getRandomFortune(): LiveData<List<Fortunes>>
+    suspend fun getRandomFortune(): Fortunes
     suspend fun fetchFortunes()
 }
 
