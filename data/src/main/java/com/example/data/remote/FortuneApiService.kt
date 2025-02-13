@@ -4,5 +4,5 @@ import retrofit2.http.GET
 
 interface FortuneApiService {
     @GET("api/fortunes")
-    suspend fun getFortunes() : List<FortuneResponse>
+    suspend fun getFortunes(): List<FortuneResponse>
 }

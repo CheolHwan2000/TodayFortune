@@ -1,6 +1,5 @@
 package com.example.data.local.dao
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -13,5 +12,5 @@ interface FortunesDao {
     suspend fun insertFortunes(fortunes: List<Fortunes>)
 
     @Query("SELECT * FROM fortunes_table ORDER BY RANDOM() LIMIT 1")
-    fun getRandomFortune(): LiveData<List<Fortunes>>
+    suspend fun getRandomFortune(): Fortunes
 }

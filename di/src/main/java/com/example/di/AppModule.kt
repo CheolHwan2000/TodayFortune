@@ -38,6 +38,7 @@ object AppModule {
     fun provideFortuneDao(database: MainDatabase): FortunesDao {
         return database.fortunesDao()
     }
+
     @Provides
     @Singleton
     fun provideFortunesRepository(fortunesDao: FortunesDao): FortunesRepository {
@@ -48,6 +49,7 @@ object AppModule {
     fun provideUserFortuneDao(database: MainDatabase): UserFortunesDao {
         return database.userFortunesDao()
     }
+
     @Provides
     @Singleton
     fun provideUserFortunesRepository(userFortunesDao: UserFortunesDao): UserFortunesRepository {
