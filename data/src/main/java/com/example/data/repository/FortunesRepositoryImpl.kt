@@ -1,7 +1,5 @@
 package com.example.data.repository
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.map
 import com.example.data.dto.DummyDto.fortuneData
 import com.example.data.local.dao.FortunesDao
 import com.example.data.mapper.FortuneMapper
@@ -13,12 +11,12 @@ class FortunesRepositoryImpl @Inject constructor(
     private val fortunesDao: FortunesDao
 ) : FortunesRepository {
 
-    override fun getRandomFortune(): LiveData<List<Fortunes>> {
-        return fortunesDao.getRandomFortune().map { it.map { Fortunes(it.id, it.fortune) } }
+    override suspend fun getRandomFortune(): Fortunes {
+        return FortuneMapper.entityToModel(fortunesDao.getRandomFortune())
     }
 
-    override suspend fun fetchFortunes(){
+    override suspend fun fetchFortunes() {
         val fortunes = fortuneData.map { FortuneMapper.dtoToEntity(it) }
-         fortunesDao.insertFortunes(fortunes)
+        fortunesDao.insertFortunes(fortunes)
     }
 }

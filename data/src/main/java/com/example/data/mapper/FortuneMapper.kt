@@ -4,7 +4,7 @@ import com.example.data.dto.DummyDto
 import com.example.data.local.entity.Fortunes
 
 object FortuneMapper {
-    fun dtoToEntity(dto: DummyDto.Fortune): Fortunes{
+    fun dtoToEntity(dto: DummyDto.Fortune): Fortunes {
         return Fortunes(
             id = dto.id,
             fortune = dto.fortune
@@ -12,7 +12,7 @@ object FortuneMapper {
     }
 
 
-    fun entityToModel(fortunes: Fortunes): com.example.domain.model.Fortunes{
+    fun entityToModel(fortunes: Fortunes): com.example.domain.model.Fortunes {
         return com.example.domain.model.Fortunes(
             fortuneNo = fortunes.id,
             fortune = fortunes.fortune

@@ -12,9 +12,9 @@ import com.example.data.local.entity.Fortunes
 import com.example.data.local.entity.UserFortunes
 
 @Database(entities = [Fortunes::class, UserFortunes::class], version = 2, exportSchema = false)
-abstract class MainDatabase :RoomDatabase(){
-    abstract fun fortunesDao() : FortunesDao
-    abstract fun userFortunesDao() : UserFortunesDao
+abstract class MainDatabase : RoomDatabase() {
+    abstract fun fortunesDao(): FortunesDao
+    abstract fun userFortunesDao(): UserFortunesDao
 
 
     companion object {
@@ -25,8 +25,9 @@ abstract class MainDatabase :RoomDatabase(){
 //                db.execSQL("ALTER TABLE UserFortunes ADD COLUMN createdDate TEXT NOT NULL DEFAULT ''")
             }
         }
-        fun getDatabase(context : Context) : MainDatabase{
-            if(INSTANCE == null){
+
+        fun getDatabase(context: Context): MainDatabase {
+            if (INSTANCE == null) {
                 INSTANCE = Room.databaseBuilder(
                     context,
                     MainDatabase::class.java,

@@ -8,7 +8,6 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import com.example.domain.model.UserFortunes
 import com.example.presentation.databinding.ActivityMainBinding
 import com.example.presentation.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -17,8 +16,9 @@ import java.time.format.DateTimeFormatter
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    lateinit var binding : ActivityMainBinding
-    private val viewModel : MainViewModel by viewModels()
+    lateinit var binding: ActivityMainBinding
+    private val viewModel: MainViewModel by viewModels()
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,25 +29,25 @@ class MainActivity : AppCompatActivity() {
         binding.btnClick.setOnClickListener {
             val userName = binding.edtName.text.toString().trim()
             val createdDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-//            val createdDate = ("2025-02-12")
-            viewModel.randomFortune().observeForever{fortunesList ->
-                viewModel.insertUserFortunes(UserFortunes(userName, fortunesList[0].fortune, createdDate))
+            try {
+                viewModel.insertUserFortunes(userName, createdDate)
+            } catch (e: Exception) {
+                Log.e("MainActivity_Exception", "${e.message}")
             }
-
-            val intent = Intent(this,ResultActivity::class.java)
-            intent.putExtra("user_name",binding.edtName.text.toString())
+            val intent = Intent(this, ResultActivity::class.java)
+            intent.putExtra("user_name", binding.edtName.text.toString())
             startActivity(intent)
         }
-
     }
-    fun observe(){
-        viewModel.isDuplicated.observe(this){
-            if (it){
-                Toast.makeText(this,"데이터 등록 성공", Toast.LENGTH_SHORT).show()
-                Log.e("MainActivity_true","$it")
-            }else{
-                Toast.makeText(this,"데이터 중복", Toast.LENGTH_SHORT).show()
-                Log.e("MainActivity_false","$it")
+
+    fun observe() {
+        viewModel.isDuplicated.observe(this) {
+            if (it) {
+                Toast.makeText(this, "데이터 등록 성공", Toast.LENGTH_SHORT).show()
+                Log.e("MainActivity_true", "$it")
+            } else {
+                Toast.makeText(this, "데이터 중복", Toast.LENGTH_SHORT).show()
+                Log.e("MainActivity_false", "$it")
             }
         }
 
